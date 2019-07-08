@@ -7,7 +7,10 @@ function [J, grad] = lrCostFunction(theta, X, y, lambda)
 
 % Initialize some useful values
 m = length(y); % number of training examples
-
+n = size(X,2);
+temp = ones(n,1);
+temp(1) = 0; %exclude theta(1), no need regularization for theta(1)
+A=eye(n);
 % You need to return the following variables correctly 
 J = 0;
 grad = zeros(size(theta));
@@ -37,7 +40,10 @@ grad = zeros(size(theta));
 %
 
 
-
+hx = sigmoid(X*theta);
+J= (-y'*log(hx)-(1-y)'*log(1-hx))/m + lambda*(temp'*(theta.^2))/(2*m);
+grad = ((hx - y)'*X/m)' + lambda*A*theta/m;
+grad(1) = sum(hx-y)/m;
 
 
 
@@ -47,6 +53,5 @@ grad = zeros(size(theta));
 
 % =============================================================
 
-grad = grad(:);
 
 end
